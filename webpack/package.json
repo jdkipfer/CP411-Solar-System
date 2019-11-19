@@ -20,7 +20,10 @@
     "webpack-dev-server": "latest"
   },
   "dependencies": {
+    "@types/dat.gui": "^0.7.5",
     "@types/three": "latest",
+    "@types/vscode": "^1.40.0",
+    "dat.gui": "^0.7.6",
     "three": "latest"
   }
 }

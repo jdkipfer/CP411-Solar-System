@@ -1,0 +1,26 @@
+{
+  "name": "cp411finalproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "latest",
+    "copy-webpack-plugin": "^5.0.5",
+    "css-loader": "latest",
+    "extract-text-webpack-plugin": "latest",
+    "html-webpack-plugin": "latest",
+    "json-loader": "latest",
+    "style-loader": "latest",
+    "typescript": "latest",
+    "webpack": "latest",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "latest"
+  },
+  "dependencies": {
+    "@types/three": "latest",
+    "three": "latest"
+  }
+}

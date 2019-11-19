@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="js/three.js"></script>
+		<script src="js/controls/OrbitControls.js"></script>
+		<script>
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 300 );
+			
+			var renderer = new THREE.WebGLRenderer({ antialias: true } );
+			
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.shadowMap.enabled = true;
+			renderer.shadowMap.type = THREE.BasicShadowMap;
+			document.body.appendChild( renderer.domElement );
+
+
+				
+			//textures
+			var textureSun = new THREE.TextureLoader().load( "textures/sun.jpg" );
+			textureSun.wrapS = THREE.RepeatWrapping;
+			textureSun.wrapT = THREE.RepeatWrapping;
+			textureSun.repeat.set( 1, 1 );
+			
+			
+			var textureMercury = new THREE.TextureLoader().load( "textures/mercury.jpg" );
+			textureMercury.wrapS = THREE.RepeatWrapping;
+			textureMercury.wrapT = THREE.RepeatWrapping;
+			textureMercury.repeat.set( 1, 1 );
+			
+			var textureVenus = new THREE.TextureLoader().load( "textures/venus.jpg" );
+			textureVenus.wrapS = THREE.RepeatWrapping;
+			textureVenus.wrapT = THREE.RepeatWrapping;
+			textureVenus.repeat.set( 1, 1 );
+			
+			var textureEarth = new THREE.TextureLoader().load( "textures/earth.jpg" );
+			textureEarth.wrapS = THREE.RepeatWrapping;
+			textureEarth.wrapT = THREE.RepeatWrapping;
+			textureEarth.repeat.set( 1, 1 );
+			
+			var textureMars = new THREE.TextureLoader().load( "textures/mars.jpg" );
+			textureMars.wrapS = THREE.RepeatWrapping;
+			textureMars.wrapT = THREE.RepeatWrapping;
+			textureMars.repeat.set( 1, 1 );
+			
+			var textureJupiter = new THREE.TextureLoader().load( "textures/jupiter.jpg" );
+			textureJupiter.wrapS = THREE.RepeatWrapping;
+			textureJupiter.wrapT = THREE.RepeatWrapping;
+			textureJupiter.repeat.set( 1, 1 );
+			
+			var textureSaturn = new THREE.TextureLoader().load( "textures/satur.jpg" );
+			textureSaturn.wrapS = THREE.RepeatWrapping;
+			textureSaturn.wrapT = THREE.RepeatWrapping;
+			textureSaturn.repeat.set( 1, 1 );
+			
+			var textureNeptune = new THREE.TextureLoader().load( "textures/venus.jpg" );
+			textureNeptune.wrapS = THREE.RepeatWrapping;
+			textureNeptune.wrapT = THREE.RepeatWrapping;
+			textureNeptune.repeat.set( 1, 1 );
+			
+			var textureUranus = new THREE.TextureLoader().load( "textures/venus.jpg" );
+			textureUranus.wrapS = THREE.RepeatWrapping;
+			textureUranus.wrapT = THREE.RepeatWrapping;
+			textureUranus.repeat.set( 1, 1 );
+			
+			
+			var geometrySun = new THREE.SphereGeometry(3.5,50,50);
+			var geometryMercury = new THREE.SphereGeometry(1,50,50);
+			var geometryVenus = new THREE.SphereGeometry(2,50,50);
+			var geometryEarth = new THREE.SphereGeometry(2,50,50);
+			var geometryMars = new THREE.SphereGeometry(2,50,50);
+			var geometryJupiter = new THREE.SphereGeometry(2,50,50);
+			var geometrySaturn = new THREE.SphereGeometry(2,50,50);
+			var geometryNeptune = new THREE.SphereGeometry(2,50,50);
+			var geometryUranus = new THREE.SphereGeometry(2,50,50);
+
+			var materialSun = new THREE.MeshBasicMaterial( {map: textureSun} );
+			var materialMercury = new THREE.MeshPhongMaterial( {map: textureMercury} );
+			var materialVenus = new THREE.MeshPhongMaterial( {map: textureVenus} );
+			var materialEarth = new THREE.MeshPhongMaterial( {map: textureEarth} );
+			var materialMars = new THREE.MeshPhongMaterial( {map: textureMars} );
+			var materialJupiter = new THREE.MeshPhongMaterial( {map: textureJupiter} );
+			var materialSaturn = new THREE.MeshPhongMaterial( {map: textureSaturn} );
+			var materialNeptune = new THREE.MeshPhongMaterial( {map: textureNeptune} );
+			var materialUranus = new THREE.MeshPhongMaterial( {map: textureUranus} );
+			
+			var sun = new THREE.Mesh( geometrySun, materialSun );
+			var mercury = new THREE.Mesh( geometryMercury, materialMercury );
+			var venus = new THREE.Mesh( geometryVenus, materialVenus );
+			var earth = new THREE.Mesh( geometryEarth, materialEarth );
+			var mars = new THREE.Mesh( geometryMars, materialMars );
+			var jupiter = new THREE.Mesh( geometryJupiter, materialJupiter );
+			var saturn = new THREE.Mesh( geometrySaturn, materialSaturn );
+			var neptune = new THREE.Mesh( geometryNeptune, materialNeptune );
+			var uranus = new THREE.Mesh( geometryUranus, materialUranus );
+			
+			
+			mercury.castShadow=true
+			mercury.receiveShadow = true;
+			
+			venus.castShadow=true
+			venus.receiveShadow = true;
+			
+			earth.castShadow=true
+			earth.receiveShadow = true;
+			
+			mars.castShadow=true
+			mars.receiveShadow = true;
+			jupiter.castShadow=true
+			jupiter.receiveShadow = true;
+			
+			saturn.castShadow=true
+			saturn.receiveShadow = true;
+			
+			neptune.castShadow=true
+			neptune.receiveShadow = true;
+			
+			uranus.castShadow=true
+			uranus.receiveShadow = true;
+			
+			
+			
+			//scene.add( sun );
+			scene.add( mercury );
+			scene.add( venus );
+			scene.add( earth );
+			scene.add( mars );
+			scene.add( jupiter );
+			scene.add( saturn );
+			scene.add( neptune );
+			scene.add( uranus );
+			camera.position.z=50;
+			//camera.lookAt( (0,0,0) );
+
+
+			var light = new THREE.PointLight( 0xffffff, 5, 50 );
+			//var light = createLight( 0x0088ff )
+			//createLight( 0x0088ff )
+			materialSun.magFilter = THREE.NearestFilter;
+			light.add(new THREE.Mesh( geometrySun, materialSun ))
+			
+			scene.add( light );
+			
+			//var helper = new THREE.CameraHelper( light.shadow.camera );
+//scene.add( helper );
+
+
+			//var ambient = new THREE.AmbientLight( 0x404040 ); // soft white light
+			//scene.add( ambient );
+			
+			light.rotation.y += 0.01;
+				mercury.rotation.y += 0.01;
+				venus.rotation.y += 90;
+				earth.rotation.z += 2;
+				mars.rotation.y += 0.01;
+				jupiter.rotation.y += 0.01;
+				saturn.rotation.y += 0.01;
+				neptune.rotation.y += 0.01;
+				uranus.rotation.y += 0.01;
+				
+				
+			controls = new THREE.OrbitControls (camera, renderer.domElement);
+			controls.maxPolarAngle = Math.PI / 2;
+			//scene.fog = new THREE.Fog( 0x040306, 50, 300 );
+			scene.background = new THREE.Color( 0x040306 );
+			
+			light.position.x=0;
+				mercury.position.x=5;
+				venus.position.x=10;
+				earth.position.x=15;
+				mars.position.x=20;
+				jupiter.position.x=25;
+				saturn.position.x=30;
+				neptune.position.x=40;
+				uranus.position.x=35;
+				
+			function rotate(info[]) {
+				return [x,y];
+			}
+
+			var animate = function () {
+				requestAnimationFrame( animate );
+				
+				sun.rotation.z += 0.01;
+				mercury.rotation.z += 0.01;
+				venus.rotation.z += 0.01;
+				earth.rotation.y += 0.01;
+				mars.rotation.z += 0.01;
+				jupiter.rotation.z += 0.01;
+				saturn.rotation.z += 0.01;
+				neptune.rotation.z += 0.01;
+				uranus.rotation.z += 0.01;
+				
+				
+
+				renderer.render( scene, camera );
+			};
+
+			animate();
+			
+		</script>
+	</body>
+</html>

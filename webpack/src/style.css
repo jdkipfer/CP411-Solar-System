@@ -3,4 +3,22 @@
 html, body {
 	margin: 0;
 	padding: 0;
+	overflow: hidden;
+}
+
+body>#textboxContainer{
+	position: absolute;
+    width: 25%;
+    display: block;
+    z-index: 9999;
+    color: white;
+    background-color: black;
+}
+body>#textboxContainer>a:link{
+	position: absolute;
+    width: 25%;
+    display: block;
+    z-index: 9999;
+    color: white;
+    background-color: black;
 }

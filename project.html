@@ -11,6 +11,9 @@
 	<body>
 		<script src="js/three.js"></script>
 		<script src="js/controls/OrbitControls.js"></script>
+		<script src="js/controls/DragControls.js"></script>
+
+
 		<script>
 			var scene = new THREE.Scene();
 			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 300 );
@@ -22,7 +25,14 @@
 			renderer.shadowMap.type = THREE.BasicShadowMap;
 			document.body.appendChild( renderer.domElement );
 
-
+			//work for resize window.
+			window.addEventListener('resize', function(){
+				var width = window.innerWidth;
+				var height = window.innerHeight;
+				renderer.setSize(width, height);
+				camera.aspect = width/height;
+				camera.updateProjectionMatrix();
+			})
 				
 			//textures
 			var textureSun = new THREE.TextureLoader().load( "textures/sun.jpg" );
@@ -56,31 +66,37 @@
 			textureJupiter.wrapT = THREE.RepeatWrapping;
 			textureJupiter.repeat.set( 1, 1 );
 			
-			var textureSaturn = new THREE.TextureLoader().load( "textures/satur.jpg" );
+			var textureSaturn = new THREE.TextureLoader().load( "textures/saturn.jpg" );
 			textureSaturn.wrapS = THREE.RepeatWrapping;
 			textureSaturn.wrapT = THREE.RepeatWrapping;
 			textureSaturn.repeat.set( 1, 1 );
 			
-			var textureNeptune = new THREE.TextureLoader().load( "textures/venus.jpg" );
+			var textureNeptune = new THREE.TextureLoader().load( "textures/neptune.jpg" );
 			textureNeptune.wrapS = THREE.RepeatWrapping;
 			textureNeptune.wrapT = THREE.RepeatWrapping;
 			textureNeptune.repeat.set( 1, 1 );
 			
-			var textureUranus = new THREE.TextureLoader().load( "textures/venus.jpg" );
+			var textureUranus = new THREE.TextureLoader().load( "textures/uranus.jpg" );
 			textureUranus.wrapS = THREE.RepeatWrapping;
 			textureUranus.wrapT = THREE.RepeatWrapping;
 			textureUranus.repeat.set( 1, 1 );
+
+			var texturePluto = new THREE.TextureLoader().load( "textures/pluto.png" );
+			texturePluto.wrapS = THREE.RepeatWrapping;
+			texturePluto.wrapT = THREE.RepeatWrapping;
+			texturePluto.repeat.set( 1, 1 );
 			
 			
-			var geometrySun = new THREE.SphereGeometry(3.5,50,50);
+			var geometrySun = new THREE.SphereGeometry(5,50,50);
 			var geometryMercury = new THREE.SphereGeometry(1,50,50);
-			var geometryVenus = new THREE.SphereGeometry(2,50,50);
-			var geometryEarth = new THREE.SphereGeometry(2,50,50);
-			var geometryMars = new THREE.SphereGeometry(2,50,50);
-			var geometryJupiter = new THREE.SphereGeometry(2,50,50);
-			var geometrySaturn = new THREE.SphereGeometry(2,50,50);
+			var geometryVenus = new THREE.SphereGeometry(2.5,50,50);
+			var geometryEarth = new THREE.SphereGeometry(2.5,50,50);
+			var geometryMars = new THREE.SphereGeometry(1.5,50,50);
+			var geometryJupiter = new THREE.SphereGeometry(3,50,50);
+			var geometrySaturn = new THREE.SphereGeometry(3.5,50,50);
 			var geometryNeptune = new THREE.SphereGeometry(2,50,50);
-			var geometryUranus = new THREE.SphereGeometry(2,50,50);
+			var geometryUranus = new THREE.SphereGeometry(3.5,50,50);
+			var geometryPluto= new THREE.SphereGeometry(0.5,50,50);
 
 			var materialSun = new THREE.MeshBasicMaterial( {map: textureSun} );
 			var materialMercury = new THREE.MeshPhongMaterial( {map: textureMercury} );
@@ -91,7 +107,8 @@
 			var materialSaturn = new THREE.MeshPhongMaterial( {map: textureSaturn} );
 			var materialNeptune = new THREE.MeshPhongMaterial( {map: textureNeptune} );
 			var materialUranus = new THREE.MeshPhongMaterial( {map: textureUranus} );
-			
+			var materialPluto = new THREE.MeshPhongMaterial( {map: texturePluto} );
+
 			var sun = new THREE.Mesh( geometrySun, materialSun );
 			var mercury = new THREE.Mesh( geometryMercury, materialMercury );
 			var venus = new THREE.Mesh( geometryVenus, materialVenus );
@@ -101,30 +118,35 @@
 			var saturn = new THREE.Mesh( geometrySaturn, materialSaturn );
 			var neptune = new THREE.Mesh( geometryNeptune, materialNeptune );
 			var uranus = new THREE.Mesh( geometryUranus, materialUranus );
+			var pluto = new THREE.Mesh( geometryPluto, materialPluto );
 			
 			
-			mercury.castShadow=true
+			mercury.castShadow=true;
 			mercury.receiveShadow = true;
 			
-			venus.castShadow=true
+			venus.castShadow=true;
 			venus.receiveShadow = true;
 			
-			earth.castShadow=true
+			earth.castShadow=true;
 			earth.receiveShadow = true;
 			
-			mars.castShadow=true
+			mars.castShadow=true;
 			mars.receiveShadow = true;
-			jupiter.castShadow=true
+
+			jupiter.castShadow=true;
 			jupiter.receiveShadow = true;
 			
-			saturn.castShadow=true
+			saturn.castShadow=true;
 			saturn.receiveShadow = true;
 			
-			neptune.castShadow=true
+			neptune.castShadow=true;
 			neptune.receiveShadow = true;
 			
-			uranus.castShadow=true
+			uranus.castShadow=true;
 			uranus.receiveShadow = true;
+
+			pluto.castShadow=true;
+			pluto.receiveShadow = true;
 			
 			
 			
@@ -137,11 +159,12 @@
 			scene.add( saturn );
 			scene.add( neptune );
 			scene.add( uranus );
+			scene.add( pluto );
 			camera.position.z=50;
 			//camera.lookAt( (0,0,0) );
 
 
-			var light = new THREE.PointLight( 0xffffff, 5, 50 );
+			var light = new THREE.PointLight( 0xffffff, 5, 100 );
 			//var light = createLight( 0x0088ff )
 			//createLight( 0x0088ff )
 			materialSun.magFilter = THREE.NearestFilter;
@@ -165,6 +188,7 @@
 				saturn.rotation.y += 0.01;
 				neptune.rotation.y += 0.01;
 				uranus.rotation.y += 0.01;
+				pluto.rotation.y += 0.01;
 				
 				
 			controls = new THREE.OrbitControls (camera, renderer.domElement);
@@ -172,15 +196,40 @@
 			//scene.fog = new THREE.Fog( 0x040306, 50, 300 );
 			scene.background = new THREE.Color( 0x040306 );
 			
+			//add the drag control can drag every single planet(except the sum).
+			var planets = [
+				mercury, venus, earth, mars, jupiter, saturn, neptune, uranus, pluto
+			];
+			dragControls = new THREE.DragControls(planets, camera, renderer.domElement);
+
+			controls.addEventListener('dragstart', function(event){
+						event.object.material.emissive.set(0xaaaaaa);
+			});
+
+			controls.addEventListener('dragend', function(event){
+						event.object.material.emissive.set(0x000000);
+			});
+			
+			
+			
 			light.position.x=0;
-				mercury.position.x=5;
-				venus.position.x=10;
-				earth.position.x=15;
-				mars.position.x=20;
-				jupiter.position.x=25;
-				saturn.position.x=30;
-				neptune.position.x=40;
-				uranus.position.x=35;
+				mercury.position.x=8;
+				venus.position.x=16;
+				venus.position.z=Math.sin(15)*16;
+				earth.position.x=24;
+				earth.position.z=Math.sin(30)*24;
+				mars.position.x=32;
+				mars.position.z=Math.sin(45)*32;
+				jupiter.position.x=40;
+				jupiter.position.z=Math.sin(60)*40;
+				saturn.position.x=48;
+				saturn.position.z=Math.sin(75)*48;
+				neptune.position.x=64;
+				neptune.position.z=Math.sin(90)*64;
+				uranus.position.x=56;
+				uranus.position.z=Math.sin(105)*56;
+				pluto.position.x=72;
+				pluto.position.z=Math.sin(120)*72;
 				
 			
 			var animate = function () {
@@ -195,6 +244,8 @@
 				saturn.rotation.z += 0.01;
 				neptune.rotation.z += 0.01;
 				uranus.rotation.z += 0.01;
+				pluto.rotation.z += 0.01;
+
 				
 				
 
@@ -202,7 +253,6 @@
 			};
 
 			animate();
-			
 		</script>
 	</body>
 </html>

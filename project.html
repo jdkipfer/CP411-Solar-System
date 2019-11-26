@@ -98,6 +98,16 @@
 			var geometryUranus = new THREE.SphereGeometry(3.5,50,50);
 			var geometryPluto= new THREE.SphereGeometry(0.5,50,50);
 
+			var mercuryPathway = new THREE.RingGeometry( 8, 8.1, 100 );
+			var venusPathway = new THREE.RingGeometry( 16, 16.1, 100 );
+			var earthPathway = new THREE.RingGeometry( 24, 24.1, 100 );
+			var marsPathway = new THREE.RingGeometry( 32, 32.1, 100 );
+			var jupiterPathway = new THREE.RingGeometry( 40, 40.1, 100 );
+			var saturnPathway = new THREE.RingGeometry( 48, 48.1, 100 );
+			var neptunePathway = new THREE.RingGeometry( 64, 64.1, 100 );
+			var uranusPathway = new THREE.RingGeometry( 56, 56.1, 100 );
+			var plutoPathway = new THREE.RingGeometry( 72, 72.1, 100 );
+
 			var materialSun = new THREE.MeshBasicMaterial( {map: textureSun} );
 			var materialMercury = new THREE.MeshPhongMaterial( {map: textureMercury} );
 			var materialVenus = new THREE.MeshPhongMaterial( {map: textureVenus} );
@@ -109,6 +119,17 @@
 			var materialUranus = new THREE.MeshPhongMaterial( {map: textureUranus} );
 			var materialPluto = new THREE.MeshPhongMaterial( {map: texturePluto} );
 
+			var materialMercuryPath = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide} );
+			var materialVenusPath = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide} );
+			var materialEarthPath = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide} );
+			var materialMarsPath = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide} );
+			var materialJupiterPath = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide} );
+			var materialSaturnPath = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide} );
+			var materialNeptunePath = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide} );
+			var materialUranusPath = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide} );
+			var materialPlutoPath = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide} );
+
+
 			var sun = new THREE.Mesh( geometrySun, materialSun );
 			var mercury = new THREE.Mesh( geometryMercury, materialMercury );
 			var venus = new THREE.Mesh( geometryVenus, materialVenus );
@@ -119,6 +140,26 @@
 			var neptune = new THREE.Mesh( geometryNeptune, materialNeptune );
 			var uranus = new THREE.Mesh( geometryUranus, materialUranus );
 			var pluto = new THREE.Mesh( geometryPluto, materialPluto );
+
+			var mercuryPath = new THREE.Mesh(mercuryPathway, materialMercuryPath);
+			mercuryPath.rotateX(Math.PI/2);
+			var venusPath = new THREE.Mesh(venusPathway, materialVenusPath);
+			venusPath.rotateX(Math.PI/2);
+			var earthPath = new THREE.Mesh(earthPathway, materialEarthPath);
+			earthPath.rotateX(Math.PI/2);
+			var marsPath = new THREE.Mesh(marsPathway, materialMarsPath);
+			marsPath.rotateX(Math.PI/2);
+			var jupiterPath = new THREE.Mesh(jupiterPathway, materialJupiterPath);
+			jupiterPath.rotateX(Math.PI/2);
+			var saturnPath = new THREE.Mesh(saturnPathway, materialSaturnPath);
+			saturnPath.rotateX(Math.PI/2);
+			var neptunePath = new THREE.Mesh(neptunePathway, materialNeptunePath);
+			neptunePath.rotateX(Math.PI/2);
+			var uranusPath = new THREE.Mesh(uranusPathway, materialUranusPath);
+			uranusPath.rotateX(Math.PI/2);
+			var plutoPath = new THREE.Mesh(plutoPathway, materialPlutoPath);
+			plutoPath.rotateX(Math.PI/2);
+
 			
 			
 			mercury.castShadow=true;
@@ -160,6 +201,17 @@
 			scene.add( neptune );
 			scene.add( uranus );
 			scene.add( pluto );
+
+			scene.add(mercuryPath);
+			scene.add(venusPath);
+			scene.add(earthPath);
+			scene.add(marsPath);
+			scene.add(jupiterPath);
+			scene.add(saturnPath);
+			scene.add(neptunePath);
+			scene.add(uranusPath);
+			scene.add(plutoPath);
+
 			camera.position.z=50;
 			//camera.lookAt( (0,0,0) );
 
@@ -215,20 +267,20 @@
 			light.position.x=0;
 				mercury.position.x=8;
 				venus.position.x=16;
-				venus.position.z=Math.sin(15)*16;
-				earth.position.x=24;
+				//venus.position.z=Math.sin(15)*16;
+				earth.position.x=Math.cos(30)*24;
 				earth.position.z=Math.sin(30)*24;
-				mars.position.x=32;
+				mars.position.x=Math.cos(45)*32;
 				mars.position.z=Math.sin(45)*32;
-				jupiter.position.x=40;
+				jupiter.position.x=Math.cos(60)*40;
 				jupiter.position.z=Math.sin(60)*40;
-				saturn.position.x=48;
+				saturn.position.x= Math.cos(75)*48;
 				saturn.position.z=Math.sin(75)*48;
-				neptune.position.x=64;
+				neptune.position.x=Math.cos(90)*64;
 				neptune.position.z=Math.sin(90)*64;
-				uranus.position.x=56;
+				uranus.position.x=Math.cos(105)*56;
 				uranus.position.z=Math.sin(105)*56;
-				pluto.position.x=72;
+				pluto.position.x=Math.cos(120)*72;
 				pluto.position.z=Math.sin(120)*72;
 				
 			

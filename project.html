@@ -9,14 +9,9 @@
 		</style>
 	</head>
 	<body>
-
-		
-
-
 		<script src="js/three.js"></script>
 		<script src="js/controls/OrbitControls.js"></script>
 		<script src="js/controls/DragControls.js"></script>
-
 
 		<script>
 			var scene = new THREE.Scene();
@@ -205,7 +200,7 @@
 			scene.add( neptune );
 			scene.add( uranus );
 			scene.add( pluto );
-
+			
 			scene.add(mercuryPath);
 			scene.add(venusPath);
 			scene.add(earthPath);
@@ -251,6 +246,7 @@
 			controls.maxPolarAngle = Math.PI / 2;
 			//scene.fog = new THREE.Fog( 0x040306, 50, 300 );
 			scene.background = new THREE.Color( 0x040306 );
+
 			
 			//add the drag control can drag every single planet(except the sum).
 			var planets = [
@@ -300,9 +296,10 @@
 				
 			
 			var animate = function () {
+
 				requestAnimationFrame( animate );
 				
-				sun.rotation.z += 0.01;
+				light.rotation.y += 0.01;
 				mercury.rotation.z += 0.01;
 				venus.rotation.z += 0.01;
 				earth.rotation.y += 0.01;
@@ -360,5 +357,6 @@
 
 			animate();
 		</script>
+
 	</body>
 </html>

@@ -9,6 +9,10 @@
 		</style>
 	</head>
 	<body>
+
+		
+
+
 		<script src="js/three.js"></script>
 		<script src="js/controls/OrbitControls.js"></script>
 		<script src="js/controls/DragControls.js"></script>
@@ -96,17 +100,17 @@
 			var geometrySaturn = new THREE.SphereGeometry(3.5,50,50);
 			var geometryNeptune = new THREE.SphereGeometry(2,50,50);
 			var geometryUranus = new THREE.SphereGeometry(3.5,50,50);
-			var geometryPluto= new THREE.SphereGeometry(0.5,50,50);
+			var geometryPluto= new THREE.SphereGeometry(0.7,50,50);
 
-			var mercuryPathway = new THREE.RingGeometry( 8, 8.1, 100 );
-			var venusPathway = new THREE.RingGeometry( 16, 16.1, 100 );
-			var earthPathway = new THREE.RingGeometry( 24, 24.1, 100 );
-			var marsPathway = new THREE.RingGeometry( 32, 32.1, 100 );
-			var jupiterPathway = new THREE.RingGeometry( 40, 40.1, 100 );
-			var saturnPathway = new THREE.RingGeometry( 48, 48.1, 100 );
-			var neptunePathway = new THREE.RingGeometry( 64, 64.1, 100 );
-			var uranusPathway = new THREE.RingGeometry( 56, 56.1, 100 );
-			var plutoPathway = new THREE.RingGeometry( 72, 72.1, 100 );
+			var mercuryPathway = new THREE.RingGeometry( 8, 8.05, 100 );
+			var venusPathway = new THREE.RingGeometry( 16, 16.05, 100 );
+			var earthPathway = new THREE.RingGeometry( 24, 24.05, 100 );
+			var marsPathway = new THREE.RingGeometry( 32, 32.05, 100 );
+			var jupiterPathway = new THREE.RingGeometry( 40, 40.05, 100 );
+			var saturnPathway = new THREE.RingGeometry( 48, 48.05, 100 );
+			var neptunePathway = new THREE.RingGeometry( 64, 64.05, 100 );
+			var uranusPathway = new THREE.RingGeometry( 56, 56.05, 100 );
+			var plutoPathway = new THREE.RingGeometry( 72, 72.05, 100 );
 
 			var materialSun = new THREE.MeshBasicMaterial( {map: textureSun} );
 			var materialMercury = new THREE.MeshPhongMaterial( {map: textureMercury} );
@@ -266,8 +270,8 @@
 			
 			light.position.x=0;
 				mercury.position.x=8;
-				venus.position.x=16;
-				//venus.position.z=Math.sin(15)*16;
+				venus.position.x=Math.cos(15)*16;
+				venus.position.z=Math.sin(15)*16;
 				earth.position.x=Math.cos(30)*24;
 				earth.position.z=Math.sin(30)*24;
 				mars.position.x=Math.cos(45)*32;
@@ -282,6 +286,17 @@
 				uranus.position.z=Math.sin(105)*56;
 				pluto.position.x=Math.cos(120)*72;
 				pluto.position.z=Math.sin(120)*72;
+
+				var mercuryAngle = 0;
+				var venusAngle = 15;
+				var earthAngle = 30;
+				var marsAngle = 45;
+				var jupiterAngle = 60;
+				var saturnAngle = 75;
+				var neptuneAngle = 90;
+				var uranusAngle = 105;
+				var plutoAngle = 120;
+
 				
 			
 			var animate = function () {
@@ -297,7 +312,46 @@
 				neptune.rotation.z += 0.01;
 				uranus.rotation.z += 0.01;
 				pluto.rotation.z += 0.01;
+ 
+				
+				mercuryV = 0.01;
+				venusV = -0.008;
+				earthV = 0.007;
+				marsV = 0.006;
+				jupiterV = 0.004;
+				saturnV = 0.003;
+				neptuneV = 0.002;
+				uranusV = -0.002;
+				plutoV = 0.001
 
+				mercuryAngle += mercuryV;
+				venusAngle += venusV;
+				earthAngle += earthV;
+				marsAngle += marsV;
+				jupiterAngle += jupiterV;
+				saturnAngle += saturnV;
+				neptuneAngle += neptuneV;
+				uranusAngle += uranusV;
+				plutoAngle += plutoV;
+
+				mercury.position.x=Math.cos(mercuryAngle)*8;
+				mercury.position.z=Math.sin(mercuryAngle)*8;
+				venus.position.x=Math.cos(venusAngle)*16;
+				venus.position.z=Math.sin(venusAngle)*16;
+				earth.position.x=Math.cos(earthAngle)*24;
+				earth.position.z=Math.sin(earthAngle)*24;
+				mars.position.x=Math.cos(marsAngle)*32;
+				mars.position.z=Math.sin(marsAngle)*32;
+				jupiter.position.x=Math.cos(jupiterAngle)*40;
+				jupiter.position.z=Math.sin(jupiterAngle)*40;
+				saturn.position.x= Math.cos(saturnAngle)*48;
+				saturn.position.z=Math.sin(saturnAngle)*48;
+				neptune.position.x=Math.cos(neptuneAngle)*64;
+				neptune.position.z=Math.sin(neptuneAngle)*64;
+				uranus.position.x=Math.cos(uranusAngle)*56;
+				uranus.position.z=Math.sin(uranusAngle)*56;
+				pluto.position.x=Math.cos(plutoAngle)*72;
+				pluto.position.z=Math.sin(plutoAngle)*72;
 				
 				
 

@@ -12,6 +12,8 @@
 		<script src="js/three.js"></script>
 		<script src="js/controls/OrbitControls.js"></script>
 		<script src="js/controls/DragControls.js"></script>
+		<script src="js/dat.gui.min.js"></script>
+
 
 		<script>
 			var scene = new THREE.Scene();
@@ -247,7 +249,7 @@
 			//scene.fog = new THREE.Fog( 0x040306, 50, 300 );
 			scene.background = new THREE.Color( 0x040306 );
 
-			
+			/*
 			//add the drag control can drag every single planet(except the sum).
 			var planets = [
 				mercury, venus, earth, mars, jupiter, saturn, neptune, uranus, pluto
@@ -261,7 +263,7 @@
 			controls.addEventListener('dragend', function(event){
 						event.object.material.emissive.set(0x000000);
 			});
-			
+			*/
 			
 			
 			light.position.x=0;
@@ -294,6 +296,95 @@
 				var plutoAngle = 120;
 
 				
+			var FizzyText = function(){
+				this.Light_Distance = 100;
+				this.Light_Intensity = 5;
+				this.Mercury = 0.01;
+				this.Venus = -0.008;
+				this.Earth = 0.007;
+				this.Mars = 0.006;
+				this.Jupiter = 0.004;
+				this.Saturn = 0.003;
+				this.Uranus = -0.002;
+				this.Neptune = 0.002;
+				this.Pluto = 0.001;
+				
+				
+			}
+			window.onload = function(){
+				var text = new FizzyText();
+				var gui = new dat.GUI();
+				var light_dist = gui.add(text, 'Light_Distance', 0, 300);
+				var light_intens = gui.add(text, 'Light_Intensity', 0, 15);
+				var mercury_anim = gui.add(text, 'Mercury', -0.1, 0.1);
+				var venus_anim = gui.add(text,'Venus', -0.1, 0.1);
+				var earth_anim = gui.add(text, 'Earth', -0.1, 0.1);
+				var mars_anim = gui.add(text, 'Mars', -0.1, 0.1);
+				var jupiter_anim = gui.add(text, 'Jupiter', -0.1, 0.1);
+				var saturn_anim = gui.add(text, 'Saturn', -0.1, 0.1);
+				var uranus_anim = gui.add(text, 'Uranus', -0.1, 0.1);
+				var neptune_anim = gui.add(text, 'Neptune', -0.1, 0.1);
+				var pluto_anim = gui.add(text, 'Pluto', -0.1, 0.1);
+
+				
+				//var light_value = 100;
+
+				light_dist.onChange(function(value){
+					light.distance = value;
+
+				});
+
+				light_intens.onChange(function(value){
+					light.intensity = value;
+				});
+
+				mercury_anim.onChange(function(value){
+					 mercuryV = value;
+				});
+
+				venus_anim.onChange(function(value){
+					venusV = value;
+				});
+
+				earth_anim.onChange(function(value){
+					earthV = value;
+				});
+
+				mars_anim.onChange(function(value){
+					marsV = value;
+				});
+
+				jupiter_anim.onChange(function(value){
+					jupiterV = value;
+				});
+
+				saturn_anim.onChange(function(value){
+					saturnV = value;
+				});
+
+				neptune_anim.onChange(function(value){
+					neptuneV = value;
+				});
+
+				uranus_anim.onChange(function(value){
+					uranusV = value;
+				});
+
+				pluto_anim.onChange(function(value){
+					plutoV = value;
+				});
+
+			}
+
+				mercuryV = 0.01;
+				venusV = -0.008;
+				earthV = 0.007;
+				marsV = 0.006;
+				jupiterV = 0.004;
+				saturnV = 0.003;
+				neptuneV = 0.002;
+				uranusV = -0.002;
+				plutoV = 0.001
 			
 			var animate = function () {
 
@@ -309,17 +400,6 @@
 				neptune.rotation.z += 0.01;
 				uranus.rotation.z += 0.01;
 				pluto.rotation.z += 0.01;
- 
-				
-				mercuryV = 0.01;
-				venusV = -0.008;
-				earthV = 0.007;
-				marsV = 0.006;
-				jupiterV = 0.004;
-				saturnV = 0.003;
-				neptuneV = 0.002;
-				uranusV = -0.002;
-				plutoV = 0.001
 
 				mercuryAngle += mercuryV;
 				venusAngle += venusV;

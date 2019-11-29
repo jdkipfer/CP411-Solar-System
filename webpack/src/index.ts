@@ -12,6 +12,14 @@ const gui = new dat.GUI();
 let scene = new THREE.Scene()
 const textureManager = new THREE.LoadingManager();
 
+const options = {
+	speed: 2,
+	ambient: 3,
+	sun: 5,
+	ringsVisible: true,
+	planetLock: true,
+	selectedPlanet:"sun",
+}
 const textureSources = [
 	{
 		name: "mercury",
@@ -57,14 +65,14 @@ const textureSources = [
 		orbitDistance:9.58	
 	}, {
 		name: "uranus",
-		source: "textures/venus.jpg",
+		source: "textures/uranus.jpg",
 		orbitalVelocity: 0.228,
 		wikipedia:"Uranus",
 		diameter:4.01	,
 		orbitDistance:19.20	
 	}, {
 		name: "neptune",
-		source: "textures/venus.jpg",
+		source: "textures/neptune.jpg",
 		orbitalVelocity: 0.182,
 		wikipedia:"Neptune",
 		diameter:3.88,
@@ -92,10 +100,11 @@ const getExtract = async (name: string) => {
 	} = await fetch(url).then(r => r.json());
 	return resp
 }
-const sunRadius = 1;
 const textureLoader = new THREE.TextureLoader(textureManager)
 let texturesStarted = 0;
 let texturesLoaded = 0;
+
+const tb = (i : number) => i == 0? 0.4 : 0.4+0.3*2**(i-1)
 
 const loadTexture = (src : string) => {
 	texturesStarted++;
@@ -107,12 +116,16 @@ const loadTexture = (src : string) => {
 }
 let distanceScale = 10;
 let diameterScale = .5;
+
+const sunRadius = 109.2*diameterScale/2.0;
 const planets = textureSources.map((src, i) => {
+	console.log(src.name, distanceScale*tb(i))
 	return new Planet(
 		src.name, 
-		src.wikipedia, 
-		src.orbitDistance*distanceScale, 
-		src.diameter*diameterScale, 
+		src.wikipedia,
+		distanceScale*tb(i),
+		//src.orbitDistance*distanceScale, 
+		Math.log10(src.diameter*distanceScale/2.0), 
 		0, 
 		src.orbitalVelocity*1/distanceScale, 
 		0.01, 
@@ -127,12 +140,35 @@ planets[2].addMoon(moon)
 
 const n = 7;
 
-for (let j = 0; j < 7; j++) {
+const minSat = (textureSources[5].diameter*diameterScale/2)+Math.log10(1.15);
+const maxSat = minSat+Math.log10(7.15);
+const stepSat = (maxSat - minSat) / n
+for (let j = minSat; j < maxSat; j += stepSat) {
 	for (let i = 0; i < 100; i++) {
-		const moon = new Planet(`saturn moon ${j},${i} `,"Rings_of_Saturn", 0.9 + 0.5 * (j / n), .01, THREE.Math.degToRad(27), .1 * (i + 1), 0, new Vector3(0, 0, 0), planets[5].material)
+		const moon = new Planet(`saturn moon ${j},${i} `,"Rings_of_Saturn", j, textureSources[5].diameter*diameterScale/1000, THREE.Math.degToRad(27), .1 * (i + 1), 0, new Vector3(0, 0, 0), planets[5].material)
 		planets[5].addMoon(moon)
 	}
 }
+
+
+//Asteroids
+const particleCount = 7000,
+    particles = new THREE.Geometry(),
+    pMaterial = new THREE.PointsMaterial({
+      color: 0xFFFFFF,
+      size: .001
+    });
+
+for(let i = 0; i < particleCount; i++){
+	const asteroid = new THREE.Vector3();
+	asteroid.x = THREE.Math.randFloat(tb(3)*distanceScale*1.05,tb(4)*distanceScale*.95)
+	asteroid.applyAxisAngle(new Vector3(0,1,0),THREE.Math.randFloat(0,360))
+	asteroid.y = THREE.Math.randFloatSpread(5.0)
+	particles.vertices.push(asteroid)
+}
+
+const pMesh = new THREE.Points(particles, pMaterial)
+scene.add(pMesh);
 
 // create the camera
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
@@ -160,13 +196,23 @@ const sunLight = new THREE.PointLight(0xffffff, 5, 50);
 sunLight.castShadow = true;
 sunLight.shadow.mapSize.width = 1024; // default
 sunLight.shadow.mapSize.height = 1024; // default
-sunLight.shadow.camera.near = 1; // default
+sunLight.shadow.camera.near = sunRadius; // default
 sunLight.shadow.camera.far = 1000 // default
 sunLight.shadow.radius = 10
-const sun = new Planet("sun","Sun", 0, sunRadius, 0, .001, .001, new Vector3(0, 0, 0), new MeshBasicMaterial({ map: loadTexture("textures/sun.jpg") }))
+const sun = new Planet(
+	"sun",
+	"Sun", 
+	0, 
+	Math.log10(sunRadius), 
+	0, 
+	.001, 
+	.001, 
+	new Vector3(0, 0, 0), new MeshBasicMaterial({ map: loadTexture("textures/sun.jpg") }),
+	false)
 sunLight.add(sun)
 scene.add(sunLight)
 const ambient = new THREE.AmbientLight(0x404040); // soft white light
+
 
 scene.add(ambient);
 
@@ -205,19 +251,14 @@ camera.lookAt(scene.position)
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.maxPolarAngle = Math.PI / 2;
 controls.enablePan = false;
-controls.enableZoom = false;
+//controls.enableZoom = false;
 
 function animate(): void {
 	requestAnimationFrame(animate)
 	if (texturesLoaded == texturesStarted) render()
 }
 
-const options = {
-	speed: 2,
-	ambient: 1,
-	sun: 5
-}
-
+ambient.intensity = options.ambient
 
 const getCurr = () => options.speed * 0.001 * Date.now()
 
@@ -227,30 +268,51 @@ gui.add(options, 'speed', 1, 100).onChange(val => {
 	options.speed = val
 	prevFrame = getCurr()
 })
-gui.add(options, 'ambient', 0, 5).onChange(val => {
+gui.add(options, 'ambient', 0, 10).onChange(val => {
 	ambient.intensity = val
 })
 gui.add(options, 'sun', 0, 5).onChange(val => {
 	sunLight.intensity = val
 })
+gui.add(options, 'ringsVisible', true).onChange(val => {
+	planets.forEach(p => p.toggleRing(val))
+})
+gui.add(options, 'planetLock', true).onChange(val => {
+	if(val){
+		controls.enablePan = false,
+		controls.enableZoom = false
+	}else{
+		controls.enablePan = true,
+		controls.enableZoom = true
+	}
+})
+let currentObject : THREE.Object3D = sun.mesh;
+gui.add(options, 'selectedPlanet', planets.map(p => p.planetName)).onChange(name => {
+	const planet = planets.find(p => p.planetName === name)
+	if(planet){
+		currentObject = planet.mesh
+	}
+})
 const camOffset = 10;
 const direction = new THREE.Vector3();
-let currentObject : THREE.Object3D = sun.mesh;
 
 function render(): void {
 	
-	currentObject.getWorldPosition( controls.target );
-	controls.update();
 	
 	// update the transformation of the camera so it has an offset position to the current target
-	
-	direction.subVectors( camera.position, controls.target );
-	direction.normalize().multiplyScalar( camOffset );
-	camera.position.copy( direction.add( controls.target ) );
+	if(options.planetLock){
+		
+		currentObject.getWorldPosition( controls.target );
+		controls.update();
+		direction.subVectors( camera.position, controls.target );
+		direction.normalize().multiplyScalar( camOffset );
+		camera.position.copy( direction.add( controls.target ) );
+	}
 	const curr = getCurr()
 	const timer = curr - prevFrame;
 	prevFrame = curr;
 	planets.forEach(p => p.tick(timer))
+	pMesh.rotation.y += timer*1/4.61
 	renderer.render(scene, camera)
 }
 textureManager.onLoad = function () {
@@ -265,6 +327,8 @@ document.addEventListener('keydown',e => {
 	console.log(e)
 	if(e.key === "Escape") {
 		currentObject = sun.mesh;
+		options.selectedPlanet = sun.planetName
+		gui.updateDisplay()
 		updateExtract()
     }
 },false)
@@ -287,6 +351,8 @@ function onMouseMove(e: MouseEvent) {
 	//	intersects = raycaster.intersectObjects( cubes.children );
 	if(intersects.length > 0){
 		currentObject = intersects[0].object
+		options.selectedPlanet = (currentObject.parent.parent.parent as Planet).planetName
+		gui.updateDisplay()
 		updateExtract()
 	}
 
